@@ -1,0 +1,24 @@
+{
+  "name": "check-environments-action",
+  "version": "1.0.0",
+  "description": "![Commit Activity](https://img.shields.io/github/commit-activity/t/subhamay-bhattacharyya-gha/check-environments-action)&nbsp;![Last Commit](https://img.shields.io/github/last-commit/subhamay-bhattacharyya-gha/check-environments-action)&nbsp;![Release Date](https://img.shields.io/github/release-date/subhamay-bhattacharyya-gha/check-environments-action)&nbsp;![Repo Size](https://img.shields.io/github/repo-size/subhamay-bhattacharyya-gha/check-environments-action)&nbsp;![File Count](https://img.shields.io/github/directory-file-count/subhamay-bhattacharyya-gha/check-environments-action)&nbsp;![Issues](https://img.shields.io/github/issues/subhamay-bhattacharyya-gha/check-environments-action)&nbsp;![Top Language](https://img.shields.io/github/languages/top/subhamay-bhattacharyya-gha/check-environments-action)&nbsp;![Monthly Commit Activity](https://img.shields.io/github/commit-activity/m/subhamay-bhattacharyya-gha/check-environments-action)&nbsp;![Custom Endpoint](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/bsubhamay/06e35985280456b113298ed56c626e73/raw/check-environments-action.json?)",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/subhamay-bhattacharyya-gha/check-environments-action.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/subhamay-bhattacharyya-gha/check-environments-action/issues"
+  },
+  "homepage": "https://github.com/subhamay-bhattacharyya-gha/check-environments-action#readme",
+  "dependencies": {
+    "@actions/core": "^1.11.1",
+    "@actions/github": "^6.0.0"
+  }
+}
