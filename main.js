@@ -48,7 +48,7 @@ async function run() {
       summary += `| \`${env}\` | ${statusIcon} |\n`;
     }
 
-    summary += `\n**All Environments Present:** ${envStatus.all ? '✅ Yes' : '❌ No'}\n`;
+    summary += `\n**All Environments Configured:** ${envStatus.all ? '✅ Yes' : '❌ No'}\n`;
 
     // Write to GitHub Step Summary
     const summaryFile = process.env.GITHUB_STEP_SUMMARY;
