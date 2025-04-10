@@ -1,5 +1,6 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
+const fs = require('fs');
 
 async function run() {
   try {
@@ -29,12 +30,38 @@ async function run() {
       }
     }
 
-    // Add "all" key: true if all envs are true, false otherwise
+    // Add "all" key
     const allExist = requiredEnvs.every(env => envStatus[env] === true);
     envStatus.all = allExist;
 
+    // Set output for use in other steps
     const jsonOutput = JSON.stringify(envStatus);
     core.setOutput('env_status', jsonOutput);
+
+    // Build markdown summary
+    let summary = `### 🔍 Environment Check Summary\n\n`;
+    summary += `| Environment | Status |\n`;
+    summary += `|-------------|--------|\n`;
+
+    for (const env of requiredEnvs) {
+      const statusIcon = envStatus[env] ? '✅' : '❌';
+      summary += `| \`${env}\` | ${statusIcon} |\n`;
+    }
+
+    summary += `\n**All Environments Present:** ${envStatus.all ? '✅ Yes' : '❌ No'}\n`;
+
+    // Write to GitHub Step Summary
+    const summaryFile = process.env.GITHUB_STEP_SUMMARY;
+    if (summaryFile) {
+      fs.appendFileSync(summaryFile, summary);
+    } else {
+      core.warning('GITHUB_STEP_SUMMARY environment variable not found.');
+    }
+
+    // Fail the job if any environment is missing
+    if (!envStatus.all) {
+      core.setFailed('One or more required environments are missing.');
+    }
 
   } catch (error) {
     core.setFailed(error.message);
