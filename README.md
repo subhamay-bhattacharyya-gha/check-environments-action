@@ -14,38 +14,36 @@ This GitHub Action provides a reusable composite workflow that sets up Python an
 
 ## Inputs
 
-| Name           | Description         | Required | Default        |
-|----------------|---------------------|----------|----------------|
-| `input-1`      | Input description.  | No       | `default-value`|
-| `input-2`      | Input description.  | No       | `default-value`|
-| `input-3`      | Input description.  | No       | `default-value`|
-| `github-token` | GitHub token. Used for API authentication. | Yes | — |
+## Inputs
+
+| Name           | Description                                         | Required | Default        |
+|----------------|-----------------------------------------------------|----------|----------------|
+| `token` | GitHub token used for API authentication.           | Yes      | —              |
+
 
 ---
 
 ## Example Usage
 
 ```yaml
-name: Example Workflow
+name: "Check Environments"
 
 on:
-  issues:
-    types: [opened]
+  workflow_dispatch
 
 jobs:
-  example:
+  check-envs:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Run Custom Action
-        uses: your-org/your-action-repo@v1
+      - name: Check Environments
+        id: check
+        uses: subhamay-bhattacharyya-gha/check-environments-action@feature/SB-0001-initial-release
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          input-1: your-value
-          input-2: another-value
-          input-3: something-else
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Show Environment Status
+        run: |
+          echo "Environment status: ${{ steps.check.outputs.env_status }}"
 ```
 
 ## License
