@@ -2,11 +2,9 @@
 
 ![Commit Activity](https://img.shields.io/github/commit-activity/t/subhamay-bhattacharyya-gha/check-environments-action)&nbsp;![Last Commit](https://img.shields.io/github/last-commit/subhamay-bhattacharyya-gha/check-environments-action)&nbsp;![Release Date](https://img.shields.io/github/release-date/subhamay-bhattacharyya-gha/check-environments-action)&nbsp;![Repo Size](https://img.shields.io/github/repo-size/subhamay-bhattacharyya-gha/check-environments-action)&nbsp;![File Count](https://img.shields.io/github/directory-file-count/subhamay-bhattacharyya-gha/check-environments-action)&nbsp;![Issues](https://img.shields.io/github/issues/subhamay-bhattacharyya-gha/check-environments-action)&nbsp;![Top Language](https://img.shields.io/github/languages/top/subhamay-bhattacharyya-gha/check-environments-action)&nbsp;![Monthly Commit Activity](https://img.shields.io/github/commit-activity/m/subhamay-bhattacharyya-gha/check-environments-action)&nbsp;![Custom Endpoint](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/bsubhamay/13d4f16507edd626bc564513fafaab01/raw/check-environments-action.json?)
 
-GitHub Custom JavaScript Action to check the available environments.
+**GitHub Custom JavaScript Action** to check the available environments.
 
-## Action Name
-
-### Action Description
+## Action Description
 
 This GitHub Action provides a reusable composite workflow that sets up Python and interacts with the GitHub API to post a comment on an issue, including a link to a created branch.
 
@@ -14,12 +12,9 @@ This GitHub Action provides a reusable composite workflow that sets up Python an
 
 ## Inputs
 
-## Inputs
-
 | Name           | Description                                         | Required | Default        |
 |----------------|-----------------------------------------------------|----------|----------------|
 | `token` | GitHub token used for API authentication.           | Yes      | —              |
-
 
 ---
 
