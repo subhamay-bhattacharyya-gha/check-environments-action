@@ -32,7 +32,7 @@ jobs:
     steps:
       - name: Check Environments
         id: check
-        uses: subhamay-bhattacharyya-gha/check-environments-action@feature/SB-0001-initial-release
+        uses: subhamay-bhattacharyya-gha/check-environments-action@main
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
