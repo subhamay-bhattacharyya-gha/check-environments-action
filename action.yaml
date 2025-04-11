@@ -1,17 +1,15 @@
 name: "Check GitHub Environments"
 description: "Checks if ci, devl, test, and prod environments exist."
-inputs: {}
+inputs:
+  github-token:
+    description: "GitHub token for authenticating with the GitHub API"
+    required: true
 
 branding:
   icon: 'package'
   color: 'blue'
   logo: 'https://raw.githubusercontent.com/subhamay-bhattacharyya-gha/cfn-parameters-action/main/logo.png'
 
-inputs:
-  github-token:
-    description: "GitHub token for authenticating with the GitHub API"
-    required: true
-    
 runs:
   using: "node20"
   main: "main.js"
