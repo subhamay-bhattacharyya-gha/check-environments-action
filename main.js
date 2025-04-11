@@ -4,7 +4,7 @@ const fs = require('fs');
 
 async function run() {
   try {
-    const token = core.getInput('token');
+    const token = core.getInput('githb-token');
     const octokit = github.getOctokit(token);
     const repo = github.context.repo;
 

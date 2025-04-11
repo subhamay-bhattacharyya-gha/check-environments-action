@@ -7,6 +7,11 @@ branding:
   color: 'blue'
   logo: 'https://raw.githubusercontent.com/subhamay-bhattacharyya-gha/cfn-parameters-action/main/logo.png'
 
+inputs:
+  github-token:
+    description: "GitHub token for authenticating with the GitHub API"
+    required: true
+    
 runs:
   using: "node20"
   main: "main.js"
