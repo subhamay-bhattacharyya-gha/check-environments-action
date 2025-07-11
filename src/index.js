@@ -5,11 +5,30 @@ const fs = require('fs');
 async function run() {
   try {
     const token = core.getInput('github-token');
+    const orgShortName = core.getInput('org-short-name').trim();
+    const region = core.getInput('region').trim();
     const octokit = github.getOctokit(token);
     const repo = github.context.repo;
 
-    const requiredEnvs = ['ci', 'devl', 'test', 'prod'];
+    const requiredEnvs = ['ci', `${orgShortName}-devl-${region}`, `${orgShortName}-test-${region}`, `${orgShortName}-prod-${region}`];
     const envStatus = {};
+
+    if (!token) {
+      core.setFailed('Missing required input: github-token');
+      return;
+    }
+
+    if (!orgShortName) {
+      core.setFailed('Missing required input: org-short-name');
+      return;
+    }
+
+    if (!region) {
+      core.setFailed('Missing required input: region');
+      return;
+    }
+
+    core.info(`Checking environments for repository: ${requiredEnvs.join(', ')}`);
 
     for (const env of requiredEnvs) {
       try {
@@ -49,6 +68,12 @@ async function run() {
     }
 
     summary += `\n**All Environments Configured:** ${envStatus.all ? '✅ Yes' : '❌ No'}\n`;
+
+    // Show orgShortName and region if provided
+    if (orgShortName || region) {
+      summary += `\n**Org Short Name:** \`${orgShortName || 'N/A'}\`\n`;
+      summary += `**Region:** \`${region || 'N/A'}\`\n`;
+    }
 
     // Write to GitHub Step Summary
     const summaryFile = process.env.GITHUB_STEP_SUMMARY;
