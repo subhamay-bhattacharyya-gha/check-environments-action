@@ -10,29 +10,22 @@ async function run() {
     const octokit = github.getOctokit(token);
     const repo = github.context.repo;
 
-    const baseEnvs = ['ci', 'devl', 'test', 'prod'];
+    const requiredEnvs = ['ci', `${orgShortName}-devl-${region}`, `${orgShortName}-test-${region}`, `${orgShortName}-prod-${region}`];
     const envStatus = {};
 
-    const requiredEnvs = baseEnvs.map(env => {
-      if (env === 'ci') {
-        return 'ci'; // No prefix/suffix for CI
-      }
-      return `${orgShortName}-${env}-${region}`;
-    });
-
-    for (const envName of requiredEnvs) {
+  for (const env of requiredEnvs) {
       try {
         await octokit.rest.repos.getEnvironment({
           owner: repo.owner,
           repo: repo.repo,
-          environment_name: envName,
+          environment_name: env,
         });
-        core.info(`Environment '${envName}' exists.`);
-        envStatus[envName] = true;
+        core.info(`Environment '${env}' exists.`);
+        envStatus[env] = true;
       } catch (error) {
         if (error.status === 404) {
-          core.warning(`Environment '${envName}' does not exist. Run the Setup Environments workflow first.`);
-          envStatus[envName] = false;
+          core.warning(`Environment '${env}' does not exist.`);
+          envStatus[env] = false;
         } else {
           throw error;
         }
