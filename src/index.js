@@ -5,15 +5,32 @@ const fs = require('fs');
 async function run() {
   try {
     const token = core.getInput('github-token');
-    const orgShortName = core.getInput('org-short-name') || '';
-    const region = core.getInput('region') || '';
+    const orgShortName = core.getInput('org-short-name').trim();
+    const region = core.getInput('region').trim();
     const octokit = github.getOctokit(token);
     const repo = github.context.repo;
 
     const requiredEnvs = ['ci', `${orgShortName}-devl-${region}`, `${orgShortName}-test-${region}`, `${orgShortName}-prod-${region}`];
     const envStatus = {};
 
-  for (const env of requiredEnvs) {
+    if (!token) {
+      core.setFailed('Missing required input: github-token');
+      return;
+    }
+
+    if (!orgShortName) {
+      core.setFailed('Missing required input: org-short-name');
+      return;
+    }
+
+    if (!region) {
+      core.setFailed('Missing required input: region');
+      return;
+    }
+
+    core.info(`Checking environments for repository: ${requiredEnvs.join(', ')}`);
+
+    for (const env of requiredEnvs) {
       try {
         await octokit.rest.repos.getEnvironment({
           owner: repo.owner,
