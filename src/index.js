@@ -5,25 +5,34 @@ const fs = require('fs');
 async function run() {
   try {
     const token = core.getInput('github-token');
+    const orgShortName = core.getInput('org-short-name') || '';
+    const region = core.getInput('region') || '';
     const octokit = github.getOctokit(token);
     const repo = github.context.repo;
 
-    const requiredEnvs = ['ci', 'devl', 'test', 'prod'];
+    const baseEnvs = ['ci', 'devl', 'test', 'prod'];
     const envStatus = {};
 
-    for (const env of requiredEnvs) {
+    const requiredEnvs = baseEnvs.map(env => {
+      if (env === 'ci') {
+        return 'ci'; // No prefix/suffix for CI
+      }
+      return `${orgShortName}-${env}-${region}`;
+    });
+
+    for (const envName of requiredEnvs) {
       try {
         await octokit.rest.repos.getEnvironment({
           owner: repo.owner,
           repo: repo.repo,
-          environment_name: env,
+          environment_name: envName,
         });
-        core.info(`Environment '${env}' exists.`);
-        envStatus[env] = true;
+        core.info(`Environment '${envName}' exists.`);
+        envStatus[envName] = true;
       } catch (error) {
         if (error.status === 404) {
-          core.warning(`Environment '${env}' does not exist.`);
-          envStatus[env] = false;
+          core.warning(`Environment '${envName}' does not exist. Run the Setup Environments workflow first.`);
+          envStatus[envName] = false;
         } else {
           throw error;
         }
@@ -49,6 +58,12 @@ async function run() {
     }
 
     summary += `\n**All Environments Configured:** ${envStatus.all ? '✅ Yes' : '❌ No'}\n`;
+
+    // Show orgShortName and region if provided
+    if (orgShortName || region) {
+      summary += `\n**Org Short Name:** \`${orgShortName || 'N/A'}\`\n`;
+      summary += `**Region:** \`${region || 'N/A'}\`\n`;
+    }
 
     // Write to GitHub Step Summary
     const summaryFile = process.env.GITHUB_STEP_SUMMARY;

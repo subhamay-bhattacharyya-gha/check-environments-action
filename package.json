@@ -27,9 +27,6 @@
       "path": "./node_modules/cz-conventional-changelog"
     }
   },
-  "release": {
-    "extends": "./scripts/plugins/release.config.js"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/subhamay-bhattacharyya-gha/check-environments-action.git"
