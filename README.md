@@ -15,19 +15,28 @@
 <!-- Row 5: Custom Metrics -->
 [![Custom Endpoint](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/bsubhamay/13d4f16507edd626bc564513fafaab01/raw/check-environments-action.json?)](https://gist.github.com/bsubhamay/13d4f16507edd626bc564513fafaab01)
 
-**GitHub Custom JavaScript Action** to check the available environments.
+**GitHub Custom JavaScript Action** to check if required environments exist in your repository.
 
 ## Action Description
 
-This GitHub Action provides a reusable composite workflow that sets up Python and interacts with the GitHub API to post a comment on an issue, including a link to a created branch.
+This GitHub Action checks the existence of required deployment environments in your repository. It verifies that the `ci` and `devl` environments are configured, while optionally checking for `test` and `prod` environments. The action will fail if any required environments are missing.
 
 ---
 
 ## Inputs
 
-| Name           | Description                                         | Required | Default        |
-| -------------- |-----------------------------------------------------|----------|----------------|
-| `token`        | GitHub token used for API authentication.           | Yes      | —              |
+| Name             | Description                                         | Required | Default        |
+| ---------------- |-----------------------------------------------------|----------|----------------|
+| `github-token`   | GitHub token used for API authentication.           | Yes      | —              |
+
+## Environments Checked
+
+| Environment | Status   | Purpose                          |
+| ----------- |----------|----------------------------------|
+| `ci`        | Required | Continuous Integration           |
+| `devl`      | Required | Development                      |
+| `test`      | Optional | Testing                          |
+| `prod`      | Optional | Production                       |
 
 ---
 
@@ -37,22 +46,39 @@ This GitHub Action provides a reusable composite workflow that sets up Python an
 name: "Check Environments"
 
 on:
-  workflow_dispatch
+  push:
+    branches: [main]
 
 jobs:
-  check-envs:
+  check-environments:
+    name: Check Required Environments
     runs-on: ubuntu-26.04
     steps:
+      - uses: actions/checkout@v7.0.1
+      
       - name: Check Environments
         id: check
         uses: subhamay-bhattacharyya-gha/check-environments-action@main
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Show Environment Status
         run: |
           echo "Environment status: ${{ steps.check.outputs.env_status }}"
 ```
+
+## Outputs
+
+| Name         | Description                                                    |
+| ------------ |----------------------------------------------------------------|
+| `env_status` | JSON object containing the status of each environment checked. |
+
+## Exit Behavior
+
+- **Success**: All required environments (`ci` and `devl`) exist.
+- **Failure**: One or more required environments are missing.
+
+The action will generate a job summary showing the status of all environments (both required and optional).
 
 ## License
 
