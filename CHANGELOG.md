@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/subhamay-bhattacharyya-gha/check-environments-action/compare/v1.1.0...v1.1.1) (2026-09-26)
+
+
+### Bug Fixes
+
+* **deps:** sync package-lock.json with package.json ([b3449c9](https://github.com/subhamay-bhattacharyya-gha/check-environments-action/commit/b3449c9a53473ce696db14442f56d311082c70c4))
+
 # [1.1.0](https://github.com/subhamay-bhattacharyya-gha/check-environments-action/compare/v1.0.0...v1.1.0) (2025-07-11)
 
 
