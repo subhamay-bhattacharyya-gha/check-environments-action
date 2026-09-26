@@ -5,20 +5,9 @@ inputs:
     description: "GitHub token for authenticating with the GitHub API"
     required: true
 
-  org-short-name:
-    description: "GitHub organization short name to be used in environment names"
-    required: true
-    default: "sb"
-
-  region:
-    description: "AWS region to be used in environment names"
-    required: true
-    default: "us-east-1"
-
 branding:
   icon: 'package'
   color: 'blue'
-  logo: 'https://raw.githubusercontent.com/subhamay-bhattacharyya-gha/cfn-parameters-action/main/logo.png'
 
 runs:
   using: "node20"

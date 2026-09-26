@@ -31834,12 +31834,12 @@ const fs = __nccwpck_require__(9896);
 async function run() {
   try {
     const token = core.getInput('github-token');
-    const orgShortName = core.getInput('org-short-name').trim();
-    const region = core.getInput('region').trim();
     const octokit = github.getOctokit(token);
     const repo = github.context.repo;
 
-    const requiredEnvs = ['ci', `${orgShortName}-devl-${region}`, `${orgShortName}-test-${region}`, `${orgShortName}-prod-${region}`];
+    const requiredEnvs = ['ci', 'devl'];
+    const optionalEnvs = ['test', 'prod'];
+    const allEnvs = [...requiredEnvs, ...optionalEnvs];
     const envStatus = {};
 
     if (!token) {
@@ -31847,19 +31847,9 @@ async function run() {
       return;
     }
 
-    if (!orgShortName) {
-      core.setFailed('Missing required input: org-short-name');
-      return;
-    }
+    core.info(`Checking environments for repository: ${allEnvs.join(', ')}`);
 
-    if (!region) {
-      core.setFailed('Missing required input: region');
-      return;
-    }
-
-    core.info(`Checking environments for repository: ${requiredEnvs.join(', ')}`);
-
-    for (const env of requiredEnvs) {
+    for (const env of allEnvs) {
       try {
         await octokit.rest.repos.getEnvironment({
           owner: repo.owner,
@@ -31878,9 +31868,9 @@ async function run() {
       }
     }
 
-    // Add "all" key
-    const allExist = requiredEnvs.every(env => envStatus[env] === true);
-    envStatus.all = allExist;
+    // Check if all required environments exist
+    const requiredExist = requiredEnvs.every(env => envStatus[env] === true);
+    envStatus.all = requiredExist;
 
     // Set output for use in other steps
     const jsonOutput = JSON.stringify(envStatus);
@@ -31891,18 +31881,13 @@ async function run() {
     summary += `| Environment | Status |\n`;
     summary += `|-------------|--------|\n`;
 
-    for (const env of requiredEnvs) {
+    for (const env of allEnvs) {
       const statusIcon = envStatus[env] ? '✅' : '❌';
-      summary += `| \`${env}\` | ${statusIcon} |\n`;
+      const optional = optionalEnvs.includes(env) ? ' (optional)' : '';
+      summary += `| \`${env}\`${optional} | ${statusIcon} |\n`;
     }
 
-    summary += `\n**All Environments Configured:** ${envStatus.all ? '✅ Yes' : '❌ No'}\n`;
-
-    // Show orgShortName and region if provided
-    if (orgShortName || region) {
-      summary += `\n**Org Short Name:** \`${orgShortName || 'N/A'}\`\n`;
-      summary += `**Region:** \`${region || 'N/A'}\`\n`;
-    }
+    summary += `\n**All Required Environments Configured:** ${envStatus.all ? '✅ Yes' : '❌ No'}\n`;
 
     // Write to GitHub Step Summary
     const summaryFile = process.env.GITHUB_STEP_SUMMARY;
