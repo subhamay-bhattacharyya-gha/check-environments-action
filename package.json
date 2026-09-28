@@ -19,7 +19,7 @@
     "commitizen": "^4.3.0",
     "cz-conventional-changelog": "^3.3.0",
     "semantic-release": "^25.0.2",
-    "@vercel/ncc": "^0.38.4"
+    "@vercel/ncc": "^0.45.0"
   },
   "config": {
     "commitizen": {
